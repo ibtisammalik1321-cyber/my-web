@@ -3,306 +3,443 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hello My Love</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>For My Love</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap');
+
   :root{
-    --pink-1:#ffe3f0;
-    --pink-2:#ffb3d9;
-    --purple-1:#e5c6ff;
-    --purple-2:#c084fc;
-    --deep:#9b3fd6;
-    --text:#5b2a70;
-    --white:#fffafd;
+    --maroon-deep:#2b0a1a;
+    --maroon:#4a1029;
+    --rose-gold:#e8b4bc;
+    --blush:#ffdce3;
+    --cream:#fff6f2;
+    --gold:#d4af37;
+    --pink:#ff5d7a;
   }
+
   *{margin:0;padding:0;box-sizing:border-box;}
-  html,body{height:100%;}
-  body{
-    font-family:'Quicksand',sans-serif;
-    background:linear-gradient(135deg,var(--pink-1),var(--purple-1) 60%,var(--pink-2));
-    background-size:300% 300%;
-    animation:gradientShift 12s ease infinite;
-    min-height:100vh;
-    overflow-x:hidden;
+
+  html,body{
+    height:100%;
+    background:radial-gradient(ellipse at top, var(--maroon) 0%, var(--maroon-deep) 70%);
+    font-family:'Cormorant Garamond', serif;
+    overflow:hidden;
+    color:var(--cream);
+  }
+
+  #heart-canvas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
-    position:relative;
-    color:var(--text);
-  }
-  @keyframes gradientShift{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-  }
-
-  .hearts{
-    position:fixed;
-    top:0;left:0;width:100%;height:100%;
-    pointer-events:none;
-    overflow:hidden;
-    z-index:0;
-  }
-  .heart{
-    position:absolute;
-    bottom:-10%;
-    font-size:22px;
-    opacity:0.55;
-    animation:floatUp linear infinite;
-    color:var(--purple-2);
-  }
-  @keyframes floatUp{
-    0%{transform:translateY(0) rotate(0deg);opacity:0;}
-    10%{opacity:0.6;}
-    90%{opacity:0.5;}
-    100%{transform:translateY(-110vh) rotate(360deg);opacity:0;}
+    z-index:2;
   }
 
   .page{
+    position:absolute;
+    inset:0;
     display:none;
-    position:relative;
-    z-index:1;
-    max-width:560px;
-    width:90%;
-    margin:40px auto;
-    background:rgba(255,255,255,0.55);
-    backdrop-filter:blur(10px);
-    border-radius:32px;
-    padding:48px 36px;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
     text-align:center;
-    box-shadow:0 20px 60px rgba(155,63,214,0.25), 0 0 0 1px rgba(255,255,255,0.4) inset;
-    animation:pageIn 0.7s ease;
-  }
-  .page.active{display:block;}
-  @keyframes pageIn{
-    from{opacity:0;transform:translateY(30px) scale(0.96);}
-    to{opacity:1;transform:translateY(0) scale(1);}
+    padding:6vh 8vw;
+    opacity:0;
+    transform:translateY(24px) scale(0.98);
+    transition:opacity .8s ease, transform .8s ease;
   }
 
-  h1.hero{
-    font-family:'Fredoka',sans-serif;
-    font-size:clamp(2.2rem,7vw,3.2rem);
-    color:var(--deep);
-    margin-bottom:22px;
-    text-shadow:0 2px 0 rgba(255,255,255,0.6);
-    animation:pulseHeart 2.4s ease-in-out infinite;
-  }
-  @keyframes pulseHeart{
-    0%,100%{transform:scale(1);}
-    50%{transform:scale(1.045);}
+  .page.active{
+    display:flex;
+    opacity:1;
+    transform:translateY(0) scale(1);
   }
 
-  p.msg{
-    font-size:1.15rem;
-    line-height:1.75;
-    color:var(--text);
-    margin-bottom:30px;
+  .eyebrow{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    letter-spacing:.35em;
+    text-transform:uppercase;
+    font-size:.75rem;
+    color:var(--rose-gold);
+    margin-bottom:1.4rem;
+    opacity:.85;
+  }
+
+  h1{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:clamp(2.4rem, 6vw, 4.6rem);
+    line-height:1.08;
+    color:var(--cream);
+    text-shadow:0 0 40px rgba(255,93,122,.35);
+    margin-bottom:1.6rem;
+  }
+
+  h1 .script{
+    display:block;
+    font-style:italic;
     font-weight:500;
+    color:var(--pink);
+    font-size:clamp(1.8rem, 4.2vw, 3rem);
+    margin-top:.2rem;
+  }
+
+  p.lead{
+    font-size:clamp(1.15rem, 2.3vw, 1.6rem);
+    max-width:640px;
+    line-height:1.65;
+    color:var(--blush);
+    font-weight:500;
+    margin-bottom:2.2rem;
+  }
+
+  .divider{
+    width:64px;
+    height:2px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin:1.4rem auto 2rem;
   }
 
   .btn-row{
     display:flex;
-    gap:20px;
-    justify-content:center;
-    align-items:center;
+    gap:1.4rem;
     flex-wrap:wrap;
+    justify-content:center;
     position:relative;
-    min-height:70px;
+    min-height:80px;
+    align-items:center;
   }
 
-  button{
-    font-family:'Fredoka',sans-serif;
-    font-size:1.1rem;
-    font-weight:600;
-    padding:14px 38px;
-    border:none;
+  .btn{
+    font-family:'Playfair Display', serif;
+    font-size:1.05rem;
+    letter-spacing:.06em;
+    padding:.9rem 2.4rem;
     border-radius:50px;
+    border:1px solid var(--gold);
+    background:transparent;
+    color:var(--cream);
     cursor:pointer;
-    transition:transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .btn-yes{
-    background:linear-gradient(135deg,var(--purple-2),var(--deep));
-    color:#fff;
-    box-shadow:0 8px 20px rgba(155,63,214,0.4);
-  }
-  .btn-yes:hover{
-    transform:translateY(-3px) scale(1.05);
-    box-shadow:0 12px 26px rgba(155,63,214,0.5);
-  }
-
-  .btn-no{
-    background:#fff;
-    color:var(--deep);
-    border:2px solid var(--purple-2);
+    transition:all .3s ease;
     position:relative;
   }
 
-  .btn-click{
-    background:linear-gradient(135deg,#ff9fd0,var(--deep));
-    color:#fff;
-    box-shadow:0 8px 20px rgba(255,120,190,0.45);
-    margin-top:10px;
+  .btn.primary{
+    background:linear-gradient(135deg, var(--pink), #c23a56);
+    border:none;
+    box-shadow:0 8px 30px rgba(255,93,122,.4);
   }
-  .btn-click:hover{
-    transform:translateY(-3px) scale(1.06);
+
+  .btn.primary:hover{
+    transform:translateY(-3px) scale(1.04);
+    box-shadow:0 12px 36px rgba(255,93,122,.55);
+  }
+
+  #noBtn{
+    position:relative;
+  }
+
+  #noBtn:hover, #noBtn:focus{
+    background:transparent;
+  }
+
+  .answer-msg{
+    margin-top:1.6rem;
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    color:var(--gold);
+    font-size:1.3rem;
+    min-height:1.6em;
+  }
+
+  .memory-line{
+    font-size:clamp(1.1rem, 2.1vw, 1.45rem);
+    max-width:620px;
+    line-height:1.75;
+    color:var(--blush);
+    margin-bottom:2.4rem;
+  }
+
+  input[type="password"]{
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.3rem;
+    letter-spacing:.3em;
+    text-align:center;
+    padding:.9rem 1.2rem;
+    border-radius:14px;
+    border:1px solid var(--rose-gold);
+    background:rgba(255,255,255,.06);
+    color:var(--cream);
+    width:260px;
+    outline:none;
+    margin-bottom:1rem;
+  }
+
+  input[type="password"]::placeholder{
+    color:rgba(255,246,242,.4);
+    letter-spacing:.1em;
+  }
+
+  .error-msg{
+    color:var(--pink);
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1rem;
+    min-height:1.4em;
+    margin-bottom:.6rem;
+  }
+
+  .lock-hint{
+    font-size:.85rem;
+    color:rgba(255,246,242,.5);
+    letter-spacing:.1em;
+    margin-top:.6rem;
   }
 
   .final-heart{
-    font-size:4.5rem;
-    margin-bottom:10px;
+    font-size:5rem;
+    margin-bottom:1rem;
     animation:beat 1.1s ease-in-out infinite;
-    display:inline-block;
-  }
-  @keyframes beat{
-    0%,100%{transform:scale(1);}
-    25%{transform:scale(1.15);}
-    40%{transform:scale(0.95);}
-    60%{transform:scale(1.1);}
+    filter:drop-shadow(0 0 30px rgba(255,93,122,.6));
   }
 
-  h1.finale{
-    font-family:'Fredoka',sans-serif;
-    font-size:clamp(2rem,8vw,3rem);
-    background:linear-gradient(90deg,#ff5fa2,var(--deep),#ff5fa2);
+  @keyframes beat{
+    0%,100%{transform:scale(1);}
+    25%{transform:scale(1.18);}
+    40%{transform:scale(.96);}
+    60%{transform:scale(1.12);}
+  }
+
+  .final-text{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:clamp(2.6rem, 7vw, 5.2rem);
+    background:linear-gradient(120deg, var(--gold), var(--pink), var(--rose-gold));
     background-size:200% auto;
     -webkit-background-clip:text;
     background-clip:text;
     color:transparent;
     animation:shine 3s linear infinite;
+    letter-spacing:.02em;
   }
+
   @keyframes shine{
     to{background-position:200% center;}
   }
 
-  .sparkle{
-    position:absolute;
-    font-size:1.2rem;
-    animation:sparkleFloat 2.5s ease-in-out infinite;
-    opacity:0.8;
-  }
-  @keyframes sparkleFloat{
-    0%,100%{transform:translateY(0) scale(1);}
-    50%{transform:translateY(-12px) scale(1.2);}
-  }
-
-  .dots{
-    margin-top:34px;
+  .progress-dots{
+    position:fixed;
+    bottom:28px;
+    left:50%;
+    transform:translateX(-50%);
     display:flex;
-    justify-content:center;
-    gap:8px;
+    gap:10px;
+    z-index:5;
   }
-  .dot{
-    width:8px;height:8px;border-radius:50%;
-    background:rgba(155,63,214,0.3);
-  }
-  .dot.on{background:var(--deep);}
 
-  @media (max-width:480px){
-    .page{padding:36px 22px;}
+  .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:rgba(255,246,242,.25);
+    transition:all .4s ease;
+  }
+
+  .dot.active{
+    background:var(--pink);
+    box-shadow:0 0 12px var(--pink);
+    width:22px;
+    border-radius:6px;
+  }
+
+  @media (max-width:520px){
+    .btn{padding:.8rem 1.8rem;font-size:.95rem;}
+    input[type="password"]{width:210px;}
   }
 </style>
 </head>
 <body>
 
-<div class="hearts" id="heartsBg"></div>
+<canvas id="heart-canvas"></canvas>
 
-<section class="page active" id="page1">
-  <h1 class="hero">Hello, My Love 💗</h1>
-  <p class="msg">
-    You are the most precious gift in my life. I like you so, so much...
-    Do you like me too?
-  </p>
-  <div class="btn-row">
-    <button class="btn-yes" onclick="goToPage(2)">Yes 💕</button>
-    <button class="btn-no" id="noBtn">No</button>
-  </div>
-  <div class="dots">
-    <div class="dot on"></div><div class="dot"></div><div class="dot"></div>
-  </div>
-</section>
+<div class="stage">
 
-<section class="page" id="page2">
-  <h1 class="hero" style="font-size:clamp(1.6rem,6vw,2.2rem);">I still remember 🌸</h1>
-  <p class="msg">
-    I remember the day we first talked — everything felt so normal.
-    I never imagined you'd become this special to me.
-    I want to spend my whole life with you.
-    I know a while ago we had a lot of misunderstandings and fights,
-    but now, let's start over again — just like the way we began.
-  </p>
-  <button class="btn-click" onclick="goToPage(3)">Click here ✨</button>
-  <div class="dots">
-    <div class="dot"></div><div class="dot on"></div><div class="dot"></div>
-  </div>
-</section>
+  <!-- PAGE 1 -->
+  <section class="page active" id="page1">
+    <div class="eyebrow">for you, always</div>
+    <h1>Hello my love<span class="script">my heart is yours</span></h1>
+    <p class="lead">
+      You are the biggest and most beautiful gift life has ever given me.
+      I love you so much. You are my life, my every heartbeat.
+    </p>
+    <div class="divider"></div>
+    <p class="lead" style="margin-bottom:1rem;">Do you love me too?</p>
+    <div class="btn-row">
+      <button class="btn primary" id="yesBtn1">Yes</button>
+      <button class="btn" id="noBtn">No</button>
+    </div>
+    <div class="answer-msg" id="answerMsg"></div>
+  </section>
 
-<section class="page" id="page3">
-  <div class="final-heart">💖</div>
-  <h1 class="finale">I love you sooo muchhh</h1>
-  <div class="dots">
-    <div class="dot"></div><div class="dot"></div><div class="dot on"></div>
-  </div>
-</section>
+  <!-- PAGE 2 -->
+  <section class="page" id="page2">
+    <div class="eyebrow">a memory I keep</div>
+    <h1 style="font-size:clamp(1.8rem,4.5vw,3rem);">I still remember it like it was today</h1>
+    <p class="memory-line">
+      I still remember the day you and I first talked.
+      Everything felt so normal back then — I had no idea
+      that you would become the best part of my life.
+    </p>
+    <button class="btn primary" id="clickHereBtn">Click here</button>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section class="page" id="page3">
+    <div class="eyebrow">one more step</div>
+    <h1 style="font-size:clamp(1.8rem,4.5vw,2.8rem);">A little secret between us</h1>
+    <p class="lead" style="margin-bottom:1.4rem;">Enter the password to continue</p>
+    <input type="password" id="passInput" placeholder="• • • • • • • •" maxlength="20">
+    <div class="error-msg" id="errorMsg"></div>
+    <button class="btn primary" id="unlockBtn">Unlock</button>
+    <div class="lock-hint">hint: a date close to both our hearts</div>
+  </section>
+
+  <!-- PAGE 4 -->
+  <section class="page" id="page4">
+    <div class="final-heart">❤️</div>
+    <div class="final-text">I love you sooo muchhh</div>
+    <p class="lead" style="margin-top:1.6rem;">Forever yours. Forever you and me.</p>
+  </section>
+
+</div>
+
+<div class="progress-dots">
+  <div class="dot active" data-p="1"></div>
+  <div class="dot" data-p="2"></div>
+  <div class="dot" data-p="3"></div>
+  <div class="dot" data-p="4"></div>
+</div>
 
 <script>
-  function goToPage(n){
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  // ---------- floating hearts background ----------
+  const canvas = document.getElementById('heart-canvas');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function makeHeart(){
+    return {
+      x: Math.random()*canvas.width,
+      y: canvas.height + 40 + Math.random()*200,
+      size: 8 + Math.random()*18,
+      speed: 0.4 + Math.random()*1.1,
+      drift: (Math.random()-0.5)*0.6,
+      opacity: 0.15 + Math.random()*0.35,
+      sway: Math.random()*Math.PI*2
+    };
+  }
+  let hearts = Array.from({length: 34}, makeHeart);
+
+  function drawHeart(x,y,size,opacity){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.scale(size/20, size/20);
+    ctx.beginPath();
+    ctx.moveTo(0,6);
+    ctx.bezierCurveTo(0,-4, -14,-4, -14,6);
+    ctx.bezierCurveTo(-14,14, 0,20, 0,26);
+    ctx.bezierCurveTo(0,20, 14,14, 14,6);
+    ctx.bezierCurveTo(14,-4, 0,-4, 0,6);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(255,93,122,${opacity})`;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    hearts.forEach(h=>{
+      h.y -= h.speed;
+      h.sway += 0.02;
+      h.x += Math.sin(h.sway)*0.4 + h.drift*0.2;
+      drawHeart(h.x, h.y, h.size, h.opacity);
+      if(h.y < -40){
+        Object.assign(h, makeHeart(), {y: canvas.height + 40});
+      }
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // ---------- page navigation ----------
+  const pages = document.querySelectorAll('.page');
+  const dots = document.querySelectorAll('.dot');
+
+  function goTo(n){
+    pages.forEach(p => p.classList.remove('active'));
     document.getElementById('page'+n).classList.add('active');
+    dots.forEach(d => d.classList.toggle('active', d.dataset.p == n));
   }
 
+  // ---------- page 1 logic ----------
+  const yesBtn1 = document.getElementById('yesBtn1');
   const noBtn = document.getElementById('noBtn');
-  function moveNoButton(){
-    const row = noBtn.parentElement.getBoundingClientRect();
-    const maxX = row.width - noBtn.offsetWidth - 10;
-    const maxY = 90;
-    const x = Math.random()*maxX - maxX/2;
-    const y = Math.random()*maxY - maxY/2;
-    noBtn.style.position='relative';
-    noBtn.style.left = x+'px';
-    noBtn.style.top = y+'px';
-  }
-  noBtn.addEventListener('mouseover', moveNoButton);
-  noBtn.addEventListener('click', function(e){
-    e.preventDefault();
-    moveNoButton();
-  });
-  noBtn.addEventListener('touchstart', function(e){
-    e.preventDefault();
-    moveNoButton();
+  const answerMsg = document.getElementById('answerMsg');
+
+  yesBtn1.addEventListener('click', () => {
+    answerMsg.textContent = "I knew it. My heart too. ❤";
+    setTimeout(() => goTo(2), 900);
   });
 
-  const heartsBg = document.getElementById('heartsBg');
-  const heartChars = ['💗','💕','💖','💓','💜'];
-  function spawnHeart(){
-    const h = document.createElement('div');
-    h.className='heart';
-    h.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
-    h.style.left = Math.random()*100+'%';
-    h.style.fontSize = (16+Math.random()*20)+'px';
-    const duration = 6+Math.random()*6;
-    h.style.animationDuration = duration+'s';
-    heartsBg.appendChild(h);
-    setTimeout(()=>h.remove(), duration*1000);
+  // "No" button dodges the cursor and can never actually be clicked
+  function dodge(e){
+    const btnRow = noBtn.parentElement.getBoundingClientRect();
+    const maxX = btnRow.width - noBtn.offsetWidth - 10;
+    const maxY = 60;
+    const newX = Math.random() * maxX;
+    const newY = (Math.random() - 0.5) * maxY;
+    noBtn.style.position = 'relative';
+    noBtn.style.left = newX/3 + 'px';
+    noBtn.style.top = newY + 'px';
+    answerMsg.textContent = "Nope, that button doesn't work on me 😌";
   }
-  setInterval(spawnHeart, 500);
-  for(let i=0;i<10;i++) setTimeout(spawnHeart, i*200);
+  noBtn.addEventListener('mouseenter', dodge);
+  noBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); dodge(e); });
+  noBtn.addEventListener('click', (e)=>{ e.preventDefault(); dodge(e); });
 
-  function addSparkles(){
-    const page3 = document.getElementById('page3');
-    const chars=['✨','💫','🌸'];
-    for(let i=0;i<6;i++){
-      const s=document.createElement('span');
-      s.className='sparkle';
-      s.textContent=chars[Math.floor(Math.random()*chars.length)];
-      s.style.left=(10+Math.random()*80)+'%';
-      s.style.top=(10+Math.random()*70)+'%';
-      s.style.animationDelay=(Math.random()*2)+'s';
-      page3.appendChild(s);
+  // ---------- page 2 logic ----------
+  document.getElementById('clickHereBtn').addEventListener('click', () => goTo(3));
+
+  // ---------- page 3 logic (password) ----------
+  const passInput = document.getElementById('passInput');
+  const errorMsg = document.getElementById('errorMsg');
+  const CORRECT_PASSWORD = "14032026";
+
+  function tryUnlock(){
+    if(passInput.value.trim() === CORRECT_PASSWORD){
+      errorMsg.textContent = "";
+      goTo(4);
+    } else {
+      errorMsg.textContent = "Not quite — try again 💭";
+      passInput.value = "";
+      passInput.focus();
     }
   }
-  addSparkles();
+
+  document.getElementById('unlockBtn').addEventListener('click', tryUnlock);
+  passInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') tryUnlock(); });
 </script>
 
 </body>
-    </html>
+</html>
